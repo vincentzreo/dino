@@ -1,13 +1,12 @@
 mod modules;
 mod transpilers;
 
-use self::modules::{load_import, resolve_import, ImportMap, CORE_MODULES};
+use self::modules::{load_import, resolve_import, ImportMap};
 use anyhow::Error;
 use anyhow::Result;
 use std::collections::HashMap;
 use std::path::Path;
 use swc_atoms::js_word;
-use swc_atoms::JsWord;
 use swc_bundler::Bundler;
 use swc_bundler::Config;
 use swc_bundler::Load;
@@ -55,10 +54,6 @@ pub fn run_bundle(entry: &str, options: &Options) -> Result<String> {
     let globals = Globals::default();
     let cm = Lrc::new(SourceMap::new(FilePathMapping::empty()));
 
-    // NOTE: Core modules are built-in to dune's binary so there is no point to pollute
-    // the bundle with extra code that the runtime can load anyway.
-    let external_modules: Vec<JsWord> = CORE_MODULES.keys().map(|k| (*k).into()).collect();
-
     #[allow(clippy::needless_match)]
     let module_type = match options.module_type {
         ModuleType::Es => ModuleType::Es,
@@ -75,7 +70,6 @@ pub fn run_bundle(entry: &str, options: &Options) -> Result<String> {
         },
         Resolver { options },
         Config {
-            external_modules,
             require: false,
             module: module_type,
             ..Default::default()
@@ -188,7 +182,6 @@ impl<'a> Resolve for Resolver<'a> {
                 Path::new(&resolve_import(
                     base,
                     specifier,
-                    true,
                     self.options.import_map.clone(),
                 )?)
                 .to_path_buf(),
@@ -208,7 +201,7 @@ impl swc_bundler::Hook for Hook {
     ) -> Result<Vec<KeyValueProp>, Error> {
         // Get filename as string.
         let file_name = module.file_name.to_string();
-        let file_name = resolve_import(None, &file_name, true, None)?;
+        let file_name = resolve_import(None, &file_name, None)?;
 
         // Compute .main and .url properties.
         Ok(vec![
