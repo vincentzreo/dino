@@ -1,7 +1,7 @@
-use crate::modules::load_import;
-use crate::modules::resolve_import;
-use crate::modules::ImportMap;
-use crate::modules::CORE_MODULES;
+mod modules;
+mod transpilers;
+
+use self::modules::{load_import, resolve_import, ImportMap, CORE_MODULES};
 use anyhow::Error;
 use anyhow::Result;
 use std::collections::HashMap;
