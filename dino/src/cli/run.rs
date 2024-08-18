@@ -2,7 +2,7 @@ use std::fs;
 
 use clap::Parser;
 
-use crate::{build_project, CmdExecutor, JsWorker, Request};
+use crate::{build_project, CmdExecutor, JsWorker, Req};
 
 #[derive(Debug, Parser)]
 
@@ -14,7 +14,7 @@ impl CmdExecutor for RunOpts {
         let content = fs::read_to_string(&filename)?;
         let worker = JsWorker::try_new(&content)?;
         // TODO: normally this should run axum server
-        let req = Request::builder()
+        let req = Req::builder()
             .method("GET".to_string())
             .url("http://localhost:3000".to_string())
             .headers(Default::default())
