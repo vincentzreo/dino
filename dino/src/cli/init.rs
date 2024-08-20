@@ -10,6 +10,7 @@ use std::{fs, path::Path};
 
 pub struct InitOpts {}
 
+#[allow(unused)]
 #[derive(Template)]
 #[template(path = "config.yml.j2")]
 struct ConfigFile {

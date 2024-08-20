@@ -1,0 +1,9 @@
+# API test
+
+## GET hello
+GET http://localhost:8080/api/hello/1?name=John
+Content-Type: application/json
+
+{
+    "name": "John"
+}
