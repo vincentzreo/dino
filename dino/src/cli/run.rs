@@ -1,8 +1,9 @@
 use std::fs;
 
 use clap::Parser;
+use dino_server::{JsWorker, Req};
 
-use crate::{build_project, CmdExecutor, JsWorker, Req};
+use crate::{build_project, CmdExecutor};
 
 #[derive(Debug, Parser)]
 
@@ -17,7 +18,6 @@ impl CmdExecutor for RunOpts {
         let req = Req::builder()
             .method("GET".to_string())
             .url("http://localhost:3000".to_string())
-            .headers(Default::default())
             .build();
         let ret = worker.run("hello", req)?;
         println!("Response: {:?}", ret);

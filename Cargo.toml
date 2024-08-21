@@ -5,6 +5,7 @@ resolver = "2"
 [workspace.dependencies]
 bundler = { path = "bundler" }
 dino-macros = { path = "dino-macros" }
+dino-server = { path = "dino-server" }
 tokio = { version = "1.39.2", features = ["rt", "rt-multi-thread", "macros"] }
 tracing = "0.1.40"
 serde_json = "1.0.124"

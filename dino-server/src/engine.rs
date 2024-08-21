@@ -17,6 +17,7 @@ fn print(msg: String) {
 
 #[derive(Debug, TypedBuilder, IntoJs)]
 pub struct Req {
+    #[builder(default)]
     pub headers: HashMap<String, String>,
     #[builder(setter(into))]
     pub method: String,
@@ -61,35 +62,6 @@ impl JsWorker {
         })
     }
 }
-
-// impl<'js> IntoJs<'js> for Request {
-//     fn into_js(self, ctx: &rquickjs::Ctx<'js>) -> rquickjs::Result<rquickjs::Value<'js>> {
-//         let obj = Object::new(ctx.clone())?;
-
-//         obj.set("headers", self.headers)?;
-//         obj.set("method", self.method)?;
-//         obj.set("url", self.url)?;
-//         obj.set("body", self.body)?;
-
-//         Ok(obj.into())
-//     }
-// }
-
-// impl<'js> FromJs<'js> for Response {
-//     fn from_js(ctx: &rquickjs::Ctx<'js>, value: rquickjs::Value<'js>) -> rquickjs::Result<Self> {
-//         let obj = Object::from_js(ctx, value)?;
-
-//         let status: u16 = obj.get("status")?;
-//         let headers: HashMap<String, String> = obj.get("headers")?;
-//         let body: Option<String> = obj.get("body")?;
-
-//         Ok(Response {
-//             status,
-//             headers,
-//             body,
-//         })
-//     }
-// }
 
 #[cfg(test)]
 mod tests {

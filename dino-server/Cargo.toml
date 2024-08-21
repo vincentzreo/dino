@@ -12,10 +12,14 @@ axum = { version = "0.7.5", features = [
     "tracing",
     "multipart",
 ] }
+dino-macros.workspace = true
 matchit = "0.7"
+rquickjs = { version = "0.6.2", features = ["full"] }
+rquickjs-macro = "0.6.2"
 serde_json = { workspace = true }
 tracing = { workspace = true }
 tokio = { workspace = true }
+typed-builder = "0.19.1"
 serde_yaml = "0.9.34"
 serde = { workspace = true }
 indexmap = { version = "2.4.0", features = ["serde"] }
