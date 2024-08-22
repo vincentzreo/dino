@@ -22,3 +22,6 @@ glob = "0.3.1"
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 tokio = { workspace = true }
+notify = { version = "6.1.1", default-features = false, features = [
+    "macos_kqueue",
+] }
