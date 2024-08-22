@@ -4,6 +4,7 @@ use glob::{glob, GlobError};
 use std::{
     collections::BTreeSet,
     fs::{self, File},
+    io,
     path::{Path, PathBuf},
 };
 
@@ -39,6 +40,7 @@ pub(crate) fn build_project(dir: &str) -> Result<String> {
     let hash = calc_project_hash(dir)?;
     fs::create_dir_all(BUILD_DIR)?;
     let filename = format!("{}/{}.mjs", BUILD_DIR, hash);
+    let config = format!("{}/{}.yml", BUILD_DIR, hash);
     let dst = Path::new(&filename);
 
     if dst.exists() {
@@ -47,6 +49,10 @@ pub(crate) fn build_project(dir: &str) -> Result<String> {
 
     let content = run_bundle("main.ts", &Default::default())?;
     std::fs::write(dst, content)?;
+
+    let mut dst = File::create(&config)?;
+    let mut src = File::open("config.yml")?;
+    io::copy(&mut src, &mut dst)?;
     Ok(filename)
 }
 

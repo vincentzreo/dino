@@ -7,3 +7,7 @@ Content-Type: application/json
 {
     "name": "John"
 }
+
+
+###  dino run
+GET http://localhost:3000/api/hello
