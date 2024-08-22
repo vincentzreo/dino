@@ -1,6 +1,7 @@
 mod config;
 mod engine;
 mod error;
+mod middleware;
 mod router;
 
 use std::collections::HashMap;
@@ -17,6 +18,7 @@ use axum::{
 use dashmap::DashMap;
 use indexmap::IndexMap;
 use matchit::Match;
+use middleware::ServerTimeLayer;
 use tokio::net::TcpListener;
 
 pub use config::*;
@@ -50,6 +52,7 @@ pub async fn start_server(port: u16, router: Vec<TenentRouter>) -> Result<()> {
     info!("Listening on {}", addr);
     let router = Router::new()
         .route("/*path", any(handler))
+        .layer(ServerTimeLayer)
         .with_state(state);
 
     axum::serve(listener, router.into_make_service()).await?;
@@ -71,6 +74,8 @@ async fn handler(
     let handler = matched.value;
     let req = assemble_req(&matched, &parts, query, body)?;
     // convert response into http response and return
+    // TODO: build a worker pool, and send req via mpsc channel and get res from oneshot channel
+    // but if code change, we need to restart the worker
     let worker = JsWorker::try_new(&router.code)?;
     let res = worker.run(handler, req)?;
     Ok(Response::from(res))
